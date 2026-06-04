@@ -1,6 +1,6 @@
 const PRODUCTS = [
  // LATTAFA
- {n:"Haayati",b:"Lattafa",ml:"100ml",p:65000,g:"Unisex",f:"Dulce"},
+ //{n:"Haayati",b:"Lattafa",ml:"100ml",p:65000,g:"Unisex",f:"Dulce"},
  {n:"Asad",b:"Lattafa",ml:"100ml",p:68000,g:"Hombre",f:"Amaderado"},
  {n:"Asad Bourbon",b:"Lattafa",ml:"100ml",p:69000,g:"Hombre",f:"Amaderado"},
  {n:"His Confession",b:"Lattafa",ml:"100ml",p:79000,g:"Hombre",f:"Amaderado"},
