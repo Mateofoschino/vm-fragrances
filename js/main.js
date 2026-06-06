@@ -410,6 +410,7 @@ function filtered(){
 function cardHTML(p, i){
   const idx        = ALL.indexOf(p);
   const visual     = p.img ? `<img class="photo" src="${p.img}" alt="${p.n}">` : bottleSVG(p.f);
+  const imgStyle   = p.img ? ` style="--img-bg:url('${p.img}')"` : '';
   const isConsult  = p.p == null;
   const priceHTML  = isConsult
     ? `<span class="price consult">Consultar</span>`
@@ -418,7 +419,7 @@ function cardHTML(p, i){
     ? `<button class="add" data-consult="${idx}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.4 8.4 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.4 8.4 0 01-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 01-.9-3.8 8.5 8.5 0 014.7-7.6A8.4 8.4 0 0112.5 3H13a8.5 8.5 0 018 8z"/></svg>Consultar</button>`
     : `<button class="add" data-idx="${idx}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Agregar</button>`;
   return `<article class="card" style="transition-delay:${(i%12)*40}ms">
-    <div class="imgwrap"><span class="fam-tag">${p.f}</span><span class="gen-tag">${p.g}</span>${visual}</div>
+    <div class="imgwrap"${imgStyle}><span class="fam-tag">${p.f}</span><span class="gen-tag">${p.g}</span>${visual}</div>
     <div class="body">
       <span class="brand-lbl">${p.b}</span>
       <h3 class="name">${p.n}</h3>
