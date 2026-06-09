@@ -175,22 +175,8 @@ section.shell{position:relative;z-index:5;padding:clamp(70px,10vw,130px) clamp(2
   position:relative;aspect-ratio:1/1;display:grid;place-items:center;overflow:hidden;
   background:radial-gradient(circle at 50% 38%,rgba(201,162,91,.1),transparent 65%);
 }
-.card .imgwrap::before{
-  content:'';position:absolute;inset:-10px;
-  background-image:var(--img-bg);
-  background-size:cover;background-position:center;
-  filter:blur(18px) brightness(.85) saturate(.7);
-  transform:scale(1.1);
-  opacity:0;transition:opacity .4s;
-}
-.card .imgwrap[style]::before{opacity:1}
-.card .imgwrap img.photo{
-  position:relative;z-index:1;
-  width:100%;height:100%;object-fit:contain;
-  transition:.7s cubic-bezier(.2,.7,.2,1);
-  padding:6px;
-}
-.card:hover .imgwrap img.photo{transform:scale(1.04)}
+.card .imgwrap img.photo{width:100%;height:100%;object-fit:cover;transition:.7s cubic-bezier(.2,.7,.2,1)}
+.card:hover .imgwrap img.photo{transform:scale(1.07)}
 .bottle{width:62%;height:auto;transition:.6s cubic-bezier(.2,.7,.2,1);filter:drop-shadow(0 18px 24px rgba(0,0,0,.55))}
 .card:hover .bottle{transform:translateY(-6px) scale(1.04)}
 .fam-tag{
@@ -337,6 +323,7 @@ footer{position:relative;z-index:5;border-top:1px solid var(--line);background:v
   .grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
   .card .name{font-size:1.18rem}
   .card .price{font-size:1.35rem}
-  .add{padding:9px 11px;font-size:.62rem}
+  .add{padding:9px 11px;font-size:.62rem;width:100%;justify-content:center}
   .card .body{padding:14px}
+  .card .foot{flex-direction:column;align-items:flex-start;gap:12px}
 }
