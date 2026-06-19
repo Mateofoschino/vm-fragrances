@@ -282,7 +282,7 @@
 // render();
 // updateCart();
 /* ========= CONFIG — EDITAR ACÁ ========= */
-const WHATSAPP = "5492494511024"; // Número real de VM Fragances (Tandil)
+const WHATSAPP = "5492494370913"; // Número real de VM Fragances (Tandil)
 const NEGOCIO  = "VM Fragances";
 
 // ── SUPABASE ──────────────────────────────────────────────────
