@@ -329,6 +329,11 @@ let searchQ    = "";
 const fmt     = n => (n == null ? "Consultar" : "$" + n.toLocaleString("es-AR"));
 const $       = s => document.querySelector(s);
 const waLink  = txt => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(txt)}`;
+const slugify = s => s.toLowerCase()
+  .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // saca acentos
+  .replace(/[^a-z0-9]+/g, "-")
+  .replace(/^-+|-+$/g, "");
+const productSlug = p => slugify(`${p.n}-${p.b}`);
 
 function bottleSVG(fam){
   const c  = FAM_COLOR[fam] || FAM_COLOR["Oriental"];
@@ -418,8 +423,14 @@ function cardHTML(p, i){
   const btnHTML    = isConsult
     ? `<button class="add" data-consult="${idx}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.4 8.4 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.4 8.4 0 01-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 01-.9-3.8 8.5 8.5 0 014.7-7.6A8.4 8.4 0 0112.5 3H13a8.5 8.5 0 018 8z"/></svg>Consultar</button>`
     : `<button class="add" data-idx="${idx}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Agregar</button>`;
-  return `<article class="card" style="transition-delay:${(i%12)*40}ms">
-    <div class="imgwrap"${imgStyle}><span class="fam-tag">${p.f}</span><span class="gen-tag">${p.g}</span>${visual}</div>
+  return `<article class="card" id="${productSlug(p)}" style="transition-delay:${(i%12)*40}ms">
+    <div class="imgwrap"${imgStyle}>
+      <span class="fam-tag">${p.f}</span><span class="gen-tag">${p.g}</span>
+      <button class="share-btn" data-share="${productSlug(p)}" title="Copiar link de este perfume" aria-label="Copiar link de este perfume">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.5" x2="15.4" y2="6.5"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/></svg>
+      </button>
+      ${visual}
+    </div>
     <div class="body">
       <span class="brand-lbl">${p.b}</span>
       <h3 class="name">${p.n}</h3>
@@ -448,6 +459,7 @@ function render(){
   $("#globalEmpty").style.display = anyShown ? "none" : "block";
   document.querySelectorAll(".add[data-idx]").forEach(b => b.onclick = () => addToCart(+b.dataset.idx, b));
   document.querySelectorAll(".add[data-consult]").forEach(b => b.onclick = () => consultProduct(+b.dataset.consult));
+  document.querySelectorAll("[data-share]").forEach(b => b.onclick = (e) => { e.stopPropagation(); shareProduct(b.dataset.share, b); });
   observeCards();
 }
 
@@ -455,6 +467,30 @@ function consultProduct(idx){
   const p   = ALL[idx];
   const msg = `¡Hola ${NEGOCIO}! 👋 Me interesa este perfume:\n\n• ${p.b} ${p.n} (${p.ml})\n\n¿Me pasás precio y disponibilidad? ¡Gracias!`;
   window.open(waLink(msg), "_blank");
+}
+
+/* ========= COMPARTIR PRODUCTO (copia el link directo a la card) ========= */
+async function shareProduct(slug, btn){
+  const url = `${location.origin}${location.pathname}#${slug}`;
+  try {
+    if (navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(url);
+    } else {
+      // fallback para navegadores/celulares viejos sin Clipboard API
+      const ta = document.createElement("textarea");
+      ta.value = url; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+    }
+    toast("Link copiado ✓ Compartilo donde quieras");
+    if (btn){
+      btn.classList.add("copied");
+      setTimeout(() => btn.classList.remove("copied"), 1200);
+    }
+  } catch(e){
+    toast("No se pudo copiar el link");
+  }
 }
 
 let io;
@@ -560,6 +596,25 @@ window.addEventListener("scroll", () => {
 });
 function toggleMenu(){ $("#mobileMenu").classList.toggle("open"); }
 
+/* ========= DEEP LINK A UN PRODUCTO (ej: #asad-bourbon-lattafa) ========= */
+function goToSharedProduct(){
+  if (!location.hash) return;
+  const el = document.querySelector(location.hash);
+  if (!el) return;
+  setTimeout(() => {
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    // resalta la card brevemente para que se note cuál es
+    el.animate(
+      [
+        { boxShadow: "0 0 0 0 rgba(201,162,91,0)" },
+        { boxShadow: "0 0 0 3px rgba(201,162,91,.9)" },
+        { boxShadow: "0 0 0 0 rgba(201,162,91,0)" }
+      ],
+      { duration: 1600, iterations: 2 }
+    );
+  }, 200);
+}
+
 // ── Arrancar: cargar datos y luego inicializar UI ──
 (async () => {
   try {
@@ -574,4 +629,5 @@ function toggleMenu(){ $("#mobileMenu").classList.toggle("open"); }
   initCatBlocks();
   render();
   updateCart();
+  goToSharedProduct();
 })();

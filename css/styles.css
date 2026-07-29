@@ -175,8 +175,8 @@ section.shell{position:relative;z-index:5;padding:clamp(70px,10vw,130px) clamp(2
   position:relative;aspect-ratio:1/1;display:grid;place-items:center;overflow:hidden;
   background:radial-gradient(circle at 50% 38%,rgba(201,162,91,.1),transparent 65%);
 }
-.card .imgwrap img.photo{width:100%;height:100%;object-fit:cover;transition:.7s cubic-bezier(.2,.7,.2,1)}
-.card:hover .imgwrap img.photo{transform:scale(1.07)}
+.card .imgwrap img.photo{width:100%;height:100%;object-fit:contain;transition:.7s cubic-bezier(.2,.7,.2,1);padding:6px}
+.card:hover .imgwrap img.photo{transform:scale(1.04)}
 .bottle{width:62%;height:auto;transition:.6s cubic-bezier(.2,.7,.2,1);filter:drop-shadow(0 18px 24px rgba(0,0,0,.55))}
 .card:hover .bottle{transform:translateY(-6px) scale(1.04)}
 .fam-tag{
@@ -185,6 +185,18 @@ section.shell{position:relative;z-index:5;padding:clamp(70px,10vw,130px) clamp(2
   background:rgba(11,9,7,.6);backdrop-filter:blur(4px);
 }
 .gen-tag{position:absolute;top:12px;right:12px;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:#8a7e68}
+.share-btn{
+  position:absolute;bottom:12px;right:12px;z-index:2;
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(11,9,7,.65);border:1px solid var(--line);
+  color:var(--gold-soft);cursor:pointer;backdrop-filter:blur(4px);
+  transition:.25s;opacity:0;transform:translateY(4px);
+}
+.card:hover .share-btn{opacity:1;transform:translateY(0)}
+.share-btn:hover{background:var(--gold);border-color:var(--gold);color:var(--noir)}
+.share-btn svg{width:15px;height:15px}
+.share-btn.copied{background:var(--gold);border-color:var(--gold);color:var(--noir)}
 .card .body{padding:18px 18px 20px;display:flex;flex-direction:column;flex:1;border-top:1px solid var(--line)}
 .card .brand-lbl{font-size:.64rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:7px}
 .card .name{font-family:'Cormorant Garamond',serif;font-size:1.42rem;line-height:1.12;font-weight:500;color:var(--cream);margin-bottom:3px}
@@ -326,4 +338,6 @@ footer{position:relative;z-index:5;border-top:1px solid var(--line);background:v
   .add{padding:9px 11px;font-size:.62rem;width:100%;justify-content:center}
   .card .body{padding:14px}
   .card .foot{flex-direction:column;align-items:flex-start;gap:12px}
+  .share-btn{opacity:1;transform:none;width:30px;height:30px;bottom:8px;right:8px}
+  .share-btn svg{width:13px;height:13px}
 }
